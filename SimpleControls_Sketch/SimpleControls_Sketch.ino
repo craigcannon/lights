@@ -1,14 +1,11 @@
 #include <SPI.h>
 #include <ble.h>
-#include <Servo.h> 
  
 #define DIGITAL_OUT_PIN    4
-#define DIGITAL_IN_PIN     5
-#define PWM_PIN            6
-#define SERVO_PIN          7
-#define ANALOG_IN_PIN      A5
+// right
+#define DIGITAL_OUT_PIN2   5
+// left
 
-Servo myservo;
 
 void setup()
 {
@@ -20,9 +17,6 @@ void setup()
   ble_begin();
   
   pinMode(DIGITAL_OUT_PIN, OUTPUT);
-  pinMode(DIGITAL_IN_PIN, INPUT);
-  
-  myservo.attach(SERVO_PIN);
 }
 
 void loop()
@@ -45,60 +39,22 @@ void loop()
       else
         digitalWrite(DIGITAL_OUT_PIN, LOW);
     }
-    else if (data0 == 0xA0) // Command is to enable analog in reading
+    else if (data0 == 0x02)  // Command is to control digital out pin 2
     {
-      if (data1 == 0x01)
-        analog_enabled = true;
+      if (data1 == 0x02)
+        digitalWrite(DIGITAL_OUT_PIN2, HIGH);
       else
-        analog_enabled = false;
-    }
-    else if (data0 == 0x02) // Command is to control PWM pin
-    {
-      analogWrite(PWM_PIN, data1);
-    }
-    else if (data0 == 0x03)  // Command is to control Servo pin
-    {
-      myservo.write(data1);
+        digitalWrite(DIGITAL_OUT_PIN2, LOW);
     }
   }
-  
-  if (analog_enabled)  // if analog reading enabled
-  {
-    // Read and send out
-    uint16_t value = analogRead(ANALOG_IN_PIN); 
-    ble_write(0x0B);
-    ble_write(value >> 8);
-    ble_write(value);
-  }
-  
-  // If digital in changes, report the state
-  if (digitalRead(DIGITAL_IN_PIN) != old_state)
-  {
-    old_state = digitalRead(DIGITAL_IN_PIN);
     
-    if (digitalRead(DIGITAL_IN_PIN) == HIGH)
-    {
-      ble_write(0x0A);
-      ble_write(0x01);
-      ble_write(0x00);    
-    }
-    else
-    {
-      ble_write(0x0A);
-      ble_write(0x00);
-      ble_write(0x00);
-    }
-  }
-  
   if (!ble_connected())
   {
     analog_enabled = false;
     digitalWrite(DIGITAL_OUT_PIN, LOW);
+    digitalWrite(DIGITAL_OUT_PIN2, LOW);
   }
   
   // Allow BLE Shield to send/receive data
   ble_do_events();  
 }
-
-
-
