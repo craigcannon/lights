@@ -49,13 +49,9 @@
     [btnConnect setTitle:@"Connect" forState:UIControlStateNormal];
     [indConnecting stopAnimating];
     
-    lblAnalogIn.enabled = false;
     swDigitalOut.enabled = false;
-    swDigitalIn.enabled = false;
-    swAnalogIn.enabled = false;
-    sldPWM.enabled = false;
-    sldServo.enabled = false;
-    
+    swDigitalOut2.enabled = false;
+        
     lblRSSI.text = @"---";
  //   lblAnalogIn.text = @"----";
 }
@@ -73,46 +69,14 @@
 
     [indConnecting stopAnimating];
     
-    lblAnalogIn.enabled = true;
     swDigitalOut.enabled = true;
-    swDigitalIn.enabled = true;
-    swAnalogIn.enabled = true;
-    sldPWM.enabled = true;
-    sldServo.enabled = true;
+    swDigitalOut2.enabled = true;
     
     swDigitalOut.on = false;
-    swDigitalIn.on = false;
-    swAnalogIn.on = false;
-    sldPWM.value = 0;
-    sldServo.value = 0;
+    swDigitalOut2.on = false;
 }
 
-// When data is comming, this will be called
--(void) bleDidReceiveData:(unsigned char *)data length:(int)length
-{
-    NSLog(@"Length: %d", length);
 
-    // parse data, all commands are in 3-byte
-    for (int i = 0; i < length; i+=3)
-    {
-        NSLog(@"0x%02X, 0x%02X, 0x%02X", data[i], data[i+1], data[i+2]);
-
-        if (data[i] == 0x0A)
-        {
-            if (data[i+1] == 0x01)
-                swDigitalIn.on = true;
-            else
-                swDigitalIn.on = false;
-        }
-        else if (data[i] == 0x0B)
-        {
-            UInt16 Value;
-            
-            Value = data[i+2] | data[i+1] << 8;
-            lblAnalogIn.text = [NSString stringWithFormat:@"%d", Value];
-        }        
-    }
-}
 
 #pragma mark - Actions
 
@@ -167,12 +131,11 @@
     [ble write:data];
 }
 
-/* Send command to Arduino to enable analog reading */
--(IBAction)sendAnalogIn:(id)sender
+-(IBAction)sendDigitalOut2:(id)sender
 {
-    UInt8 buf[3] = {0xA0, 0x00, 0x00};
+    UInt8 buf[3] = {0x02, 0x00, 0x00};
     
-    if (swAnalogIn.on)
+    if (swDigitalOut2.on)
         buf[1] = 0x01;
     else
         buf[1] = 0x00;
@@ -181,28 +144,5 @@
     [ble write:data];
 }
 
-// PWM slide will call this to send its value to Arduino
--(IBAction)sendPWM:(id)sender
-{
-    UInt8 buf[3] = {0x02, 0x00, 0x00};
-    
-    buf[1] = sldPWM.value;
-    buf[2] = (int)sldPWM.value >> 8;
-    
-    NSData *data = [[NSData alloc] initWithBytes:buf length:3];
-    [ble write:data];
-}
-
-// Servo slider will call this to send its value to Arduino
--(IBAction)sendServo:(id)sender
-{
-    UInt8 buf[3] = {0x03, 0x00, 0x00};
-    
-    buf[1] = sldServo.value;
-    buf[2] = (int)sldServo.value >> 8;
-    
-    NSData *data = [[NSData alloc] initWithBytes:buf length:3];
-    [ble write:data];
-}
 
 @end

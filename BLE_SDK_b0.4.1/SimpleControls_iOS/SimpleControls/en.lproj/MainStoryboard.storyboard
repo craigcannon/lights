@@ -110,7 +110,7 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eTe-Fx-Iis">
                                                     <connections>
-                                                        <action selector="sendDigitalOut:" destination="tbI-KU-0wl" eventType="valueChanged" id="9F6-L3-xon"/>
+                                                        <action selector="sendDigitalOut2:" destination="tbI-KU-0wl" eventType="valueChanged" id="7eN-1V-RKM"/>
                                                     </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="write" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dFa-vk-GaS">
@@ -216,6 +216,7 @@
                         <outlet property="btnConnect" destination="amg-mZ-kBR" id="dLG-RS-m2z"/>
                         <outlet property="indConnecting" destination="o6R-PA-ISX" id="jbP-Rq-EgC"/>
                         <outlet property="swDigitalOut" destination="nl6-dk-G16" id="Rwq-Gv-sIF"/>
+                        <outlet property="swDigitalOut2" destination="eTe-Fx-Iis" id="gFp-WK-hSh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8P-WY-CRb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -223,6 +224,24 @@
             <point key="canvasLocation" x="362" y="160"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="btnScanForPeripherals:"/>
+                <relationship kind="action" name="sendDigitalOut2:"/>
+                <relationship kind="action" name="sendDigitalOut:"/>
+                <relationship kind="outlet" name="btnConnect" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="indConnecting" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="lblRSSI" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="swDigitalOut" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="swDigitalOut2" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

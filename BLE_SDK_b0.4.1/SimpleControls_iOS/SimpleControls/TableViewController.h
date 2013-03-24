@@ -12,12 +12,8 @@
 @interface TableViewController : UITableViewController <BLEDelegate>
 {
     IBOutlet UIButton *btnConnect;
-    IBOutlet UISwitch *swDigitalIn;
     IBOutlet UISwitch *swDigitalOut;
-    IBOutlet UISwitch *swAnalogIn;
-    IBOutlet UILabel *lblAnalogIn;
-    IBOutlet UISlider *sldPWM;
-    IBOutlet UISlider *sldServo;
+    IBOutlet UISwitch *swDigitalOut2;
     IBOutlet UIActivityIndicatorView *indConnecting;
     IBOutlet UILabel *lblRSSI;
 }

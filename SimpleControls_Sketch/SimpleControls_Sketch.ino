@@ -17,6 +17,7 @@ void setup()
   ble_begin();
   
   pinMode(DIGITAL_OUT_PIN, OUTPUT);
+  pinMode(DIGITAL_OUT_PIN2, OUTPUT);
 }
 
 void loop()
@@ -34,18 +35,33 @@ void loop()
     
     if (data0 == 0x01)  // Command is to control digital out pin
     {
-      if (data1 == 0x01)
+      if (data1 == 0x01) {
         digitalWrite(DIGITAL_OUT_PIN, HIGH);
-      else
+        //digitalWrite(DIGITAL_OUT_PIN2, HIGH);
+      }
+      else if (data1 != 0x01) {
         digitalWrite(DIGITAL_OUT_PIN, LOW);
+        //digitalWrite(DIGITAL_OUT_PIN2, LOW);
+      }
     }
-    else if (data0 == 0x02)  // Command is to control digital out pin 2
+    
+    else if (data0 == 0x02)  // Command is to control digital out pin
     {
-      if (data1 == 0x02)
+      if (data1 == 0x01) {
         digitalWrite(DIGITAL_OUT_PIN2, HIGH);
-      else
+      }
+      else if (data1 != 0x01) {
         digitalWrite(DIGITAL_OUT_PIN2, LOW);
+      }
     }
+    
+    //else if (data0 == 0x01)  // Command is to control digital out pin 2
+    //{
+    //  if (data1 == 0x01)
+    //    digitalWrite(DIGITAL_OUT_PIN2, HIGH);
+    //  else
+    //    digitalWrite(DIGITAL_OUT_PIN2, LOW);
+    //}
   }
     
   if (!ble_connected())
